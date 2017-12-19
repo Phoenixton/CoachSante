@@ -34,16 +34,17 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar)findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
 
-        User user = CoachSanteContentProvider.getCurrentUser();
-
-        userName = (TextView)findViewById(R.id.userName);
-        userName.setText(getResources().getString(R.string.hello) + " " + user.getName() + " !");
-        userName.setGravity(Gravity.CENTER_HORIZONTAL);
-
 
         if(!CoachSanteContentProvider.isUserAlreadyDefined()) {
             Intent intent = new Intent(this, UserActivity.class);
             startActivity(intent);
+        } else {
+
+            User user = CoachSanteContentProvider.getCurrentUser();
+
+            userName = (TextView)findViewById(R.id.userName);
+            userName.setText(getResources().getString(R.string.hello) + " " + user.getName() + " !");
+            userName.setGravity(Gravity.CENTER_HORIZONTAL);
         }
 
     }

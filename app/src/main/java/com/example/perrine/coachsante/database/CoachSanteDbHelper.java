@@ -122,7 +122,6 @@ public class CoachSanteDbHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-
     //Common attributes
     private static final String ID = "id";
 
