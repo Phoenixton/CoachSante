@@ -10,7 +10,7 @@
 
 ### Premier Contact
 
-####Premier Lancement :
+#### Premier Lancement :
 S'il s'agit de votre **tout premier lancement de l'application**, l'écran d'accueil habituel ne s'affichera pas, mais vous trouverez à la place l'écran **"Profil Utilisateur"**. Il vous demande d'entrer quelques données :
 - Votre nom d'utilisateur, qui doit uniquement **ne pas être vide**.
 - Votre minimum désiré d'apport de calories par jour, **qui doit être un nombre**.
@@ -20,7 +20,7 @@ S'il s'agit de votre **tout premier lancement de l'application**, l'écran d'acc
 Vous pouvez maintenant confirmer vos informations, ne vous inquiétez pas, vous pourrez les modifier !
 
 
-####Ecran principal :
+#### Ecran principal :
 
 Vous voilà enfin sur l'écran principal. **4 boutons sont disponibles**, et un cinquième est "**caché**" dans le menu de la toolbar. Dans l'ordre :
 
@@ -47,6 +47,9 @@ Nous en parlions, il y a **deux boutons** disponibles dans le **profil de l'util
 - Bar Chart correspond à un graphique en bâtons permettant de voir si la semaine respectait les objectifs fixés. Un jour où l'on a trop mangé est représenté en rouge, avec le total de calories qui s'affiche, un jour où l'on a "bien" mangé est représenté en vert et un jour où l'on a pas assez mangé est représenté en bleu.
 - Pie Chart est un diagramme en camembert représentant la consommation de chaque aliment. Les portions consommées sont indiquées, plutôt que les pourcentages, cela semblait plus approprié. Bien entendu, si un ingrédient n'a **pas** été consommé, il n'apparait pas. Il est bon de noter qu'il s'agit de la consommation des ingrédients depuis le début de l'application, et non ceux de la semaine. L'utilisation d'un tel diagramme peut être de voir quels aliments nous consommons le plus pour pouvoir par exemple faire une liste de courses.
 
+
+###### Langues
+L'application est disponible en Français et en anglais, il suffit de changer la langue de votre téléphone pour avoir accès à l'une ou l'autre version.
 
 
 

@@ -270,7 +270,9 @@ public class InputMealActivity extends AppCompatActivity {
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(InputMealActivity.this, android.R.layout.simple_spinner_item, spinnerValues);
             holder.selectPortions.setAdapter(adapter);
+
             holder.selectPortions.setSelection(1);
+
 
             final long pid = getItemId(position);
                 /*
@@ -296,10 +298,10 @@ public class InputMealActivity extends AppCompatActivity {
                         }*/
                     if(cb.isChecked()){
                         checkBoxState[position] = true;
-                        isChecked(position, true);
+                        putInSelection(position, true);
                     } else {
                         checkBoxState[position] = false;
-                        isChecked(position, false);
+                        putInSelection(position, false);
                     }
 
                     cb.setSelected(cb.isChecked());
@@ -343,7 +345,7 @@ public class InputMealActivity extends AppCompatActivity {
 
                     a  = Double.parseDouble(spinner.getSelectedItem().toString());
                     //System.out.println("Youhou " + a + "pos " + pid);
-                    isCheckedAgain((int)pid,a);
+                    putInPortions((int)pid,a);
                     /*
                     for(Food temp: foodAvailable) {
                         if(temp.getName().equals(foodSelect.getRootView().findViewById(R.id.foodName).toString())) {
@@ -393,12 +395,12 @@ public class InputMealActivity extends AppCompatActivity {
 
         }
 
-        public void isChecked(int position,boolean flag )
+        public void putInSelection(int position,boolean flag )
         {
             checkedFoods.put(this.foodAvailable.get(position), flag);
         }
 
-        public void isCheckedAgain(int position,double flag )
+        public void putInPortions(int position,double flag )
         {
             checkedPortions.put(this.foodAvailable.get(position), flag);
         }

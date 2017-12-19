@@ -296,8 +296,6 @@ public class CoachSanteContentProvider extends ContentProvider {
             } while (cursor.moveToNext());
 
         }
-        cursor.close();
-        db.close();
 
         return ids;
     }
@@ -319,8 +317,6 @@ public class CoachSanteContentProvider extends ContentProvider {
         } else {
             return 0;
         }
-
-        db.close();
         return count;
     }
 
@@ -329,7 +325,6 @@ public class CoachSanteContentProvider extends ContentProvider {
         try {
             SQLiteDatabase db = databaseHelper.getWritableDatabase();
             db.delete(CoachSanteDbHelper.getTableMeal(), CoachSanteDbHelper.getIdMealColumn() + "=" + idMeal, null);
-            db.close();
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -341,7 +336,6 @@ public class CoachSanteContentProvider extends ContentProvider {
             SQLiteDatabase db = databaseHelper.getWritableDatabase();
             db.delete(CoachSanteDbHelper.getTableFood(), CoachSanteDbHelper.getFoodColumn() + "='" + foodName +"'", null);
             recalculateMealsTotalCalories();
-            db.close();
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -356,8 +350,6 @@ public class CoachSanteContentProvider extends ContentProvider {
         db.update(CoachSanteDbHelper.getTableFood(), toUpdate, CoachSanteDbHelper.getFoodColumn()+"='"+foodName+"'", null);
 
         recalculateMealsTotalCalories();
-
-        db.close();
 
     }
 
@@ -393,7 +385,6 @@ public class CoachSanteContentProvider extends ContentProvider {
             }
 
         }
-        db.close();
 
     }
 
@@ -440,7 +431,6 @@ public class CoachSanteContentProvider extends ContentProvider {
             } while (cursor.moveToNext());
 
         }
-        db.close();
         return foods;
     }
     /*
@@ -487,7 +477,6 @@ public class CoachSanteContentProvider extends ContentProvider {
                 mealsOfTheWeek.add(temp);
             } while (cursor.moveToNext());
         }
-        db.close();
         return mealsOfTheWeek;
     }
 
@@ -514,7 +503,7 @@ public class CoachSanteContentProvider extends ContentProvider {
             } while (cursor.moveToNext());
         }
 
-        db.close();
+
         return mealsOfTheDay;
 
 
