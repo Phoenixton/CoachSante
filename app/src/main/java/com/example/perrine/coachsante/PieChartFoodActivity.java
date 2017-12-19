@@ -1,11 +1,14 @@
 package com.example.perrine.coachsante;
 
+import android.content.Intent;
 import android.database.Cursor;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.perrine.coachsante.database.CoachSanteContentProvider;
 import com.example.perrine.coachsante.database.CoachSanteDbHelper;
@@ -79,6 +82,23 @@ public class PieChartFoodActivity extends AppCompatActivity {
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_options, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_notifications:
+                Intent intent_notifications = new Intent(getApplicationContext(), NotificationSettingsActivity.class);
+                startActivity(intent_notifications);
+                return true;
+
+        }
+        return false;
+    }
 
     public void getAllFood() {
         String orderBy = CoachSanteDbHelper.getFoodColumn() + " ASC";

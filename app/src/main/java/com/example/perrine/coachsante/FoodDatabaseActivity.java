@@ -2,6 +2,7 @@ package com.example.perrine.coachsante;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -96,7 +98,17 @@ public class FoodDatabaseActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_options, menu);
         return true;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_notifications:
+                Intent intent_notifications = new Intent(getApplicationContext(), NotificationSettingsActivity.class);
+                startActivity(intent_notifications);
+                return true;
 
+        }
+        return false;
+    }
 
     public void addFoodToDatabase(View view) {
 

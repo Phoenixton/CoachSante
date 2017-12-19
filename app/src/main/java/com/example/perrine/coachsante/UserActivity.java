@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -93,7 +94,17 @@ public class UserActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_options, menu);
         return true;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_notifications:
+                Intent intent_notifications = new Intent(getApplicationContext(), NotificationSettingsActivity.class);
+                startActivity(intent_notifications);
+                return true;
 
+        }
+        return false;
+    }
 
     public void confirmUser(View view) {
 
