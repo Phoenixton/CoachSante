@@ -61,3 +61,8 @@ Bien que cela ne pose aucun problème sur la plupart des écrans de l'applicatio
 
 ###### Calcul de l'IMC
 Vu que nous demandons déjà le poids de l'utilisateur, si nous lui demandions sa taille également, nous pourrions calculer son IMC.
+
+
+###### Git Hub
+
+https://github.com/Phoenixton/CoachSante
