@@ -6,19 +6,23 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.renderscript.ScriptGroup;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +36,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -49,6 +55,8 @@ public class InputMealActivity extends AppCompatActivity {
     ArrayList<Integer> checkedMeals;
     ArrayList<String> spinnerValues;
 
+    private HashMap<Food, Boolean> checkedFoods;
+    private HashMap<Food, Double> checkedPortions;
     Toolbar toolbar;
 
 
@@ -57,6 +65,8 @@ public class InputMealActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_input_meal);
 
+        checkedFoods = new HashMap<>();
+        checkedPortions = new HashMap<>();
         buttonIsOn = false;
         checkedMeals = new ArrayList<Integer>();
 
@@ -73,7 +83,6 @@ public class InputMealActivity extends AppCompatActivity {
 
         views = new ArrayList<FoodCustomAdapter.ViewHolder>();
 
-
         validateMeal = (Button)findViewById(R.id.validateMeal);
         validateMeal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +91,8 @@ public class InputMealActivity extends AppCompatActivity {
                 ContentValues createdMeal = new ContentValues();
 
                 int totalCaloriesOfMeal = 0;
+
+                /*
                 for(FoodCustomAdapter.ViewHolder temp : views) {
                     if(temp.foodCheckbox.isSelected()) {
                         double portion = getAccuratePortion(temp.selectPortions);
@@ -92,8 +103,14 @@ public class InputMealActivity extends AppCompatActivity {
                             }
                         }
                     }
+                }*/
+                for (Map.Entry<Food, Boolean> e : checkedFoods.entrySet()) {
+                    for (Map.Entry<Food, Double> a : checkedPortions.entrySet()) {
+                        if (e.getKey().getName() == a.getKey().getName()) {
+                            totalCaloriesOfMeal += ((double) e.getKey().getCalories() * a.getValue());
+                        }
+                    }
                 }
-
 
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Date now = new Date();
@@ -102,9 +119,22 @@ public class InputMealActivity extends AppCompatActivity {
                 Uri uri = getContentResolver().insert(CoachSanteContentProvider.MEAL_URI, createdMeal);
                 long idMeal = Long.valueOf(uri.getLastPathSegment());
 
-
                 //EATEN FOOD
                 ContentValues toInsert = new ContentValues();
+                for (Map.Entry<Food, Boolean> e : checkedFoods.entrySet()) {
+                    for (Map.Entry<Food, Double> a : checkedPortions.entrySet()) {
+                        if (e.getKey().getName().equals(a.getKey().getName())) {
+                            toInsert.put(CoachSanteDbHelper.getIdEatenFoodColumn(), e.getKey().getId());
+                            toInsert.put(CoachSanteDbHelper.getIdMealConcernedColumn(), (Long)(idMeal));
+                            toInsert.put(CoachSanteDbHelper.getQuantityEatenColumn(), a.getValue());
+                            Uri uriEatenFood = getContentResolver().insert(CoachSanteContentProvider.EATEN_FOOD_URI, toInsert);
+                        }
+                    }
+                }
+
+
+                /*
+
                 for(FoodCustomAdapter.ViewHolder temp: views) {
                     if(temp.foodCheckbox.isSelected()) {
                         for(Food tempFood: foodAvailable)
@@ -120,7 +150,7 @@ public class InputMealActivity extends AppCompatActivity {
                         }
                     }
 
-                }
+                }*/
                 Intent intent = new Intent(v.getContext(), ReviewActivity.class);
                 startActivity(intent);
             }
@@ -138,7 +168,6 @@ public class InputMealActivity extends AppCompatActivity {
            displayFoodAvailable.setAdapter(adapter);
            displayFoodAvailable.onRestoreInstanceState(listInstanceState);
        } else {
-           System.out.println("WHY AM I HERE");
            final FoodCustomAdapter adapter = new FoodCustomAdapter(InputMealActivity.this,
                    android.R.layout.simple_list_item_1, foodAvailable);
            displayFoodAvailable.setAdapter(adapter);
@@ -198,6 +227,7 @@ public class InputMealActivity extends AppCompatActivity {
     private class FoodCustomAdapter extends ArrayAdapter<Food>{
 
         private ArrayList<Food> foodAvailable;
+        private boolean[] checkBoxState = null;
 
         public FoodCustomAdapter(Context context, int i, ArrayList<Food> food) {
             super(context, i, food);
@@ -205,11 +235,10 @@ public class InputMealActivity extends AppCompatActivity {
             this.foodAvailable.addAll(food);
         }
 
-        private class ViewHolder {
+        protected class ViewHolder {
             TextView nameFood;
             CheckBox foodCheckbox;
             Spinner selectPortions;
-
 
             public String getFoodName(){
                 return foodCheckbox.getText().toString();
@@ -217,7 +246,7 @@ public class InputMealActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, final ViewGroup parent) {
 
             ViewHolder holder = null;
 
@@ -233,64 +262,126 @@ public class InputMealActivity extends AppCompatActivity {
                 holder.selectPortions = (Spinner) convertView.findViewById(R.id.spinner);
                 convertView.setTag(holder);
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(InputMealActivity.this, android.R.layout.simple_spinner_item, spinnerValues);
-                holder.selectPortions.setAdapter(adapter);
-                holder.selectPortions.setSelection(1);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
 
-                final long pid = getItemId(position);
+            checkBoxState = new boolean[foodAvailable.size()];
 
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(InputMealActivity.this, android.R.layout.simple_spinner_item, spinnerValues);
+            holder.selectPortions.setAdapter(adapter);
+            holder.selectPortions.setSelection(1);
+
+            final long pid = getItemId(position);
+                /*
                 if (checkedMeals.contains(pid)){
                     holder.foodCheckbox.setChecked(true);
 
                 } else {
                     holder.foodCheckbox.setChecked(false);
 
-                }
+                }*/
+            if(checkBoxState != null)
+                holder.foodCheckbox.setChecked(checkBoxState[position]);
 
-                holder.foodCheckbox.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        CheckBox cb = (CheckBox) v;
+            holder.foodCheckbox.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox) v;
 
+                        /*
                         if (checkedMeals.contains(pid)){
                             checkedMeals.remove(pid);
                         } else {
                             checkedMeals.add((int)pid);
-                        }
-
-                        cb.setSelected(cb.isChecked());
-
-                        boolean isSomethingUp = false;
-                        for(ViewHolder temp: views) {
-                            if(temp.foodCheckbox.isSelected()) {
-                                isSomethingUp = true;
-                            }
-                        }
-
-                        //sets the background to white if not
-                        if(!isSomethingUp) {
-                            validateMeal.setBackgroundColor(Color.WHITE);
-                            buttonIsOn = false;
-                            validateMeal.setEnabled(false);
-                        }
-
-                        if(cb.isSelected()) {
-                            if(!buttonIsOn) {
-                                buttonIsOn = true;
-                            }
-                            validateMeal.setBackgroundColor(Color.RED);
-                            validateMeal.setEnabled(true);
-                        }
-
+                        }*/
+                    if(cb.isChecked()){
+                        checkBoxState[position] = true;
+                        isChecked(position, true);
+                    } else {
+                        checkBoxState[position] = false;
+                        isChecked(position, false);
                     }
-                });
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
 
-            Food food = foodAvailable.get(position);
+                    cb.setSelected(cb.isChecked());
+
+                    boolean isSomethingUp = false;
+                    for(ViewHolder temp: views) {
+                        if(temp.foodCheckbox.isSelected()) {
+                            isSomethingUp = true;
+                        }
+                    }
+
+                    //sets the background to white if not
+                    if(!isSomethingUp) {
+                        validateMeal.setBackgroundColor(Color.WHITE);
+                        buttonIsOn = false;
+                    }
+                        validateMeal.setEnabled(false);
+
+                    if(cb.isSelected()) {
+                        if(!buttonIsOn) {
+                            buttonIsOn = true;
+                        }
+                        validateMeal.setBackgroundColor(Color.RED);
+                        validateMeal.setEnabled(true);
+                    }
+
+                }
+            });
+
+            holder.selectPortions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+                    double a = 0;
+                    View parentRow = (View) arg1.getParent();
+                    Spinner spinner = (Spinner) parentRow;
+                    RelativeLayout foodSelect = (RelativeLayout) spinner.getParent();
+
+                    final int position = spinner.getPositionForView(parentRow);
+
+                    a  = Double.parseDouble(spinner.getSelectedItem().toString());
+                    //System.out.println("Youhou " + a + "pos " + pid);
+                    isCheckedAgain((int)pid,a);
+                    /*
+                    for(Food temp: foodAvailable) {
+                        if(temp.getName().equals(foodSelect.getRootView().findViewById(R.id.foodName).toString())) {
+                            Double value = checkedPortions.get(temp);
+                            if (value != null) {
+                                if(Build.VERSION.SDK_INT >= 24) {
+                                    //checkedPortions.replace(temp, a);
+                                    isCheckedAgain(position, a);
+                                } else {
+
+                                    //checkedPortions.put(temp, a);
+                                    isCheckedAgain(position, a);
+                                }
+                            } else {
+                                checkedPortions.put(temp, a);
+                            }
+                        }
+                    }
+
+                    */
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                    // TODO Auto-generated method stub
+                    //System.out.println("BOUBOU");
+                }
+            });
+
+
+            final Food food = foodAvailable.get(position);
             holder.nameFood.setText(" (" + food.getCalories() + ")");
             holder.foodCheckbox.setText(food.getName());
             holder.foodCheckbox.setChecked(false);
+            if (checkedFoods.get(food) != null) {
+                holder.foodCheckbox.setChecked(checkedFoods.get(food));
+                // holder.foodCheckbox.setSelected(checkedFoods.get(food));
+            }
             holder.foodCheckbox.setTag(food);
 
             if(!belongInArrayList(holder.getFoodName(),views)) {
@@ -302,6 +393,15 @@ public class InputMealActivity extends AppCompatActivity {
 
         }
 
+        public void isChecked(int position,boolean flag )
+        {
+            checkedFoods.put(this.foodAvailable.get(position), flag);
+        }
+
+        public void isCheckedAgain(int position,double flag )
+        {
+            checkedPortions.put(this.foodAvailable.get(position), flag);
+        }
 
     }
 

@@ -113,9 +113,10 @@ public class FoodDatabaseActivity extends AppCompatActivity {
                 ContentValues toInsert = new ContentValues();
                 toInsert.put(CoachSanteDbHelper.getFoodColumn(), foodToAdd);
                 toInsert.put(CoachSanteDbHelper.getEstimatedCaloriesForAPortion(), Integer.parseInt(Integer.toString(caloriesPerPortion.getProgress())));
-
                 Uri uri = getContentResolver().insert(CoachSanteContentProvider.FOOD_URI, toInsert);
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.we_added) + foodToAdd + " !", Toast.LENGTH_LONG).show();
+                long idFood = Long.valueOf(uri.getLastPathSegment());
+                System.out.println("Food "+ idFood + " de nom " + foodToAdd + " de calories " +Integer.parseInt(Integer.toString(caloriesPerPortion.getProgress())));
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.we_added) + " " + foodToAdd + " !", Toast.LENGTH_LONG).show();
                 finish();
                 startActivity(getIntent());
             }

@@ -18,6 +18,7 @@ import com.example.perrine.coachsante.database.User;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -31,20 +32,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar)findViewById(R.id.mainToolbar);
+        toolbar = (Toolbar) findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
 
 
-        if(!CoachSanteContentProvider.isUserAlreadyDefined()) {
+        if (!CoachSanteContentProvider.isUserAlreadyDefined()) {
             Intent intent = new Intent(this, UserActivity.class);
             startActivity(intent);
         } else {
 
             User user = CoachSanteContentProvider.getCurrentUser();
 
-            userName = (TextView)findViewById(R.id.userName);
+            userName = (TextView) findViewById(R.id.userName);
             userName.setText(getResources().getString(R.string.hello) + " " + user.getName() + " !");
             userName.setGravity(Gravity.CENTER_HORIZONTAL);
+
+            addToDatabase();
         }
 
     }
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_options, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -87,4 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void addToDatabase() {
+
+    }
 }
