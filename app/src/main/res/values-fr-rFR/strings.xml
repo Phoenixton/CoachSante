@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Coach Sante</string>
+    <string name="settings">Parametres</string>
+    <string name="enterFoodName">Entrez le nom de l\'aliment</string>
+    <string name="review">Votre semaine en repas !</string>
+    <string name="profile">Votre Profil</string>
+    <string name="validateUser">Confirmer</string>
+    <string name="goToSimpleChart">Graphiques!</string>
+    <string name = "user_page_userMinCal">Min. Calories souhaitées :</string>
+    <string name = "user_page_userMaxCal">Max. Calories souhaitées :</string>
+    <string name = "user_page_userName">Nom d\'utilisateur :</string>
+    <string name = "user_page_userWeight">Poids (0 si non intéressé) : </string>
+    <string name = "goToBarChart">Graphe en batons</string>
+    <string name = "goToPieChart">Camembert des aliments !</string>
+    <string name = "addFoodToDatabase">Ajouter</string>
+    <string name = "updateFoodToDatabase">Updater</string>
+    <string name = "deleteFoodFromDatabase">Supprimer</string>
+    <string name = "inputMealConfirm">Ajouter le repas</string>
+    <string name = "goToDatabase">Base de données d\aliments</string>
+    <string name = "goToInputMeal">Entrez vos repas !</string>
+    <string name = "notifications">Paramètres de notifications</string>
+    <string name = "addAlarm">Ajouter l\'alarme</string>
+    <string name = "contentNotifications">Dites nous donc ce que vous avez mangé de bon aujourd\'hui !</string>
+    <string name = "titleNotifications">C\'est l\'heure !</string>
+    <string name = "please_input_infos">Veuillez fournir vos informations</string>
+    <string name = "hint_username">Nom d\'utilisateur</string>
+    <string name = "hint_weight">Poids(0 si non désiré)</string>
+    <string name = "hint_mincal">Cal. Min.</string>
+    <string name = "hint_maxcal">Cal. Max.</string>
+    <string name = "now_registered">Vous êtes enregistré !</string>
+    <string name = "need_username">Bous devez fournir un nom.</string>
+    <string name = "need_mincal">Vous devez fournir un Minimum de calories désiré.</string>
+    <string name = "need_maxcal">Vous devez fournir un Maximum de calories désiré.</string>
+    <string name = "error_mincal">Veuillez entrer un nombre, pour vos calories minimum.</string>
+    <string name = "error_maxcal">Veuillez entrer un nombre, pour vos calories maximum.</string>
+    <string name = "error_weight">Veuillez entrer un nombre, pour votre poids.</string>
+    <string name = "foodrepresentation">Consommation des Aliments</string>
+    <string name = "alarmset">Alarme réglée!</string>
+    <string name = "error_foodname">Votre aliment doit bien avoir un nom, pourtant !</string>
+    <string name = "error_duplicate">Il y a déjà un aliment sous ce nom, dans la base de données !</string>
+    <string name = "we_added">Nous avons ajouté </string>
+    <string name = "hello">Bonjour,</string>
+</resources>

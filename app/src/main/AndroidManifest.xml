@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.perrine.coachsante">
+
+
+    <uses-permission android:name="android.permission.SET_ALARM"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".UserActivity"
+                  android:parentActivityName=".MainActivity">
+        </activity>
+        <activity android:name=".ReviewActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity android:name=".ParametersActivity">
+        </activity>
+        <activity android:name=".InputMealActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity android:name=".FoodDatabaseActivity"
+                  android:parentActivityName=".MainActivity"
+                  android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity android:name=".NotificationSettingsActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".SimpleBarChartReviewActivity"
+            android:parentActivityName=".UserActivity"/>
+
+        <activity android:name=".PieChartFoodActivity"
+            android:parentActivityName=".UserActivity"/>
+
+        <provider
+            android:authorities="com.example.perrine.coachsante.database"
+            android:name="com.example.perrine.coachsante.database.CoachSanteContentProvider"
+            android:exported="false" />
+
+        <receiver android:name=".NotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.perrine.action.NOTIFICATION"/>
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
